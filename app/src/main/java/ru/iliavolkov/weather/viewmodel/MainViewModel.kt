@@ -13,8 +13,9 @@ class MainViewModel(private val liveData: MutableLiveData<AppState> = MutableLiv
 
     fun getWeatherFromServer(){
         Thread{
+            liveData.postValue(AppState.Loading(0))
             sleep(3000)
-            liveData.postValue(AppState)
+            liveData.postValue(AppState.Success("Тепло"))
         }.start()
     }
 

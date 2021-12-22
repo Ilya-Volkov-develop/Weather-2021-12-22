@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
 import ru.iliavolkov.weather.viewmodel.AppState
 import ru.iliavolkov.weather.viewmodel.MainViewModel
@@ -30,8 +29,13 @@ class MainFragment : Fragment() {
         viewModel.getWeatherFromServer()
     }
 
-    private fun renderData(data: AppState) {
-        Toast.makeText(requireContext(),"работает", Toast.LENGTH_SHORT).show()
+    private fun renderData(appState: AppState) {
+        when(appState){
+            is AppState.Error -> Toast.makeText(requireContext(),appState.error.message, Toast.LENGTH_SHORT).show()
+            is AppState.Loading -> Toast.makeText(requireContext(),"${appState.progress}", Toast.LENGTH_SHORT).show()
+            is AppState.Success -> Toast.makeText(requireContext(),"${appState.weatherData}", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     override fun onDestroy() {
