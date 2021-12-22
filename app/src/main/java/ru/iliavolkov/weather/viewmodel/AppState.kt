@@ -1,9 +1,11 @@
 package ru.iliavolkov.weather.viewmodel
 
+import ru.iliavolkov.weather.model.Weather
+
 sealed class AppState {
-    data class Loading(var progress:Int): AppState()
-    data class Success(var weatherData:String): AppState()
-    //data class Error(var error:Throwable): AppState()
-    data class Error(var error:String): AppState()
+    data class Loading(val progress:Int): AppState()
+    data class Success(var weatherData:Weather): AppState()
+    //data class Error(val error:Throwable): AppState()
+    data class Error(val error:String): AppState()
 
 }
