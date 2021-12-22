@@ -26,6 +26,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<Any> { renderData(it) })
+        viewModel.getWeatherFromServer()
     }
 
     private fun renderData(data: Any) {

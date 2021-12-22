@@ -11,7 +11,7 @@ class MainViewModel(private val liveData: MutableLiveData<Any> = MutableLiveData
         return liveData
     }
 
-    fun emulateRequest(){
+    fun getWeatherFromServer(){
         Thread{
             sleep(3000)
             liveData.postValue(Any())
