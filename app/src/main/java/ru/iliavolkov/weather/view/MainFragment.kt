@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
+import ru.iliavolkov.weather.viewmodel.AppState
 import ru.iliavolkov.weather.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
@@ -25,11 +26,11 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer<Any> { renderData(it) })
+        viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
         viewModel.getWeatherFromServer()
     }
 
-    private fun renderData(data: Any) {
+    private fun renderData(data: AppState) {
         Toast.makeText(requireContext(),"работает", Toast.LENGTH_SHORT).show()
     }
 
