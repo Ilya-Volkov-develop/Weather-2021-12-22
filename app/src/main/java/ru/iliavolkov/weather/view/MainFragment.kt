@@ -19,6 +19,10 @@ class MainFragment : Fragment() {
     get(){
         return _binding!!
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
     lateinit var viewModel: MainViewModel
 
@@ -37,11 +41,6 @@ class MainFragment : Fragment() {
             is AppState.Success -> Toast.makeText(requireContext(),appState.weatherData, Toast.LENGTH_SHORT).show()
         }
 
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     override fun onCreateView(
