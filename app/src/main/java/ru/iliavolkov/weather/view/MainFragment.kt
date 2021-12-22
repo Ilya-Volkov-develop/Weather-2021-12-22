@@ -1,5 +1,6 @@
 package ru.iliavolkov.weather.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -33,12 +34,26 @@ class MainFragment : Fragment() {
         viewModel.getWeatherFromServer()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun renderData(appState: AppState) {
         when(appState){
             //is AppState.Error -> Toast.makeText(requireContext(),appState.error.message, Toast.LENGTH_SHORT).show()
-            is AppState.Error -> Toast.makeText(requireContext(),appState.error, Toast.LENGTH_SHORT).show()
-            is AppState.Loading -> Toast.makeText(requireContext(),"${appState.progress}", Toast.LENGTH_SHORT).show()
-            is AppState.Success -> Toast.makeText(requireContext(),"${appState.weatherData.temperature}", Toast.LENGTH_SHORT).show()
+            is AppState.Error -> {
+                Toast.makeText(requireContext(),appState.error, Toast.LENGTH_SHORT).show()
+                viewModel.getWeatherFromServer()
+            }
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+//                Toast.makeText(requireContext(),"${appState.progress}", Toast.LENGTH_SHORT).show()
+            }
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                binding.cityName.text = appState.weatherData.city.nameCity
+                binding.cityCoordinates.text = "${appState.weatherData.city.lat} ${appState.weatherData.city.lon}"
+                binding.temperatureValue.text = "${appState.weatherData.temperature}"
+                binding.feelsLikeValue.text = "${appState.weatherData.feelsLike}"
+//                Toast.makeText(requireContext(),"${appState.weatherData.temperature}", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
