@@ -31,7 +31,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
-        viewModel.getWeatherFromServer()
+        viewModel.getWeather()
     }
 
     @SuppressLint("SetTextI18n")

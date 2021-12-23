@@ -32,4 +32,8 @@ class MainViewModel(
         }.start()
     }
 
+    fun getWeather() {
+        getWeatherFromServer()
+    }
+
 }
