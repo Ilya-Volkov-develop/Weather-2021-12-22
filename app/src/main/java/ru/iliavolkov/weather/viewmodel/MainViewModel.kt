@@ -33,14 +33,6 @@ class MainViewModel(
             liveData.postValue(AppState.Success(
                     if (isRussian) repositoryImpl.getWeatherFromLocalStorageRus()
                     else repositoryImpl.getWeatherFromLocalStorageWorld()))
-
-
-
         }.start()
     }
-
-    fun getWeather() {
-        getWeatherFromLocalServer()
-    }
-
 }

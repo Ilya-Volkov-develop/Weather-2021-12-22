@@ -20,6 +20,10 @@ class MainFragment : Fragment() {
     get(){
         return _binding!!
     }
+
+    private val adapter = MainFragmentAdapter()
+    private var isRussian = true
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -31,7 +35,12 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
-        viewModel.getWeather()
+        binding.mainFragmentRecyclerView.adapter = adapter
+        viewModel.getWeatherFromLocalSourceRus()
+        binding.mainFragmentFAB.setOnClickListener{
+            restart()
+            isRussian = !isRussian
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -40,18 +49,21 @@ class MainFragment : Fragment() {
             //is AppState.Error -> Toast.makeText(requireContext(),appState.error.message, Toast.LENGTH_SHORT).show()
             is AppState.Error -> {
                 Toast.makeText(requireContext(),appState.error, Toast.LENGTH_SHORT).show()
-                viewModel.getWeatherFromLocalServer()
+                restart()
             }
             is AppState.Loading -> {
-                binding.loadingLayout.visibility = View.VISIBLE
+                binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
 //                Toast.makeText(requireContext(),"${appState.progress}", Toast.LENGTH_SHORT).show()
             }
             is AppState.Success -> {
-                binding.loadingLayout.visibility = View.GONE
-                binding.cityName.text = appState.weatherData.city.nameCity
-                binding.cityCoordinates.text = "${appState.weatherData.city.lat} ${appState.weatherData.city.lon}"
-                binding.temperatureValue.text = "${appState.weatherData.temperature}"
-                binding.feelsLikeValue.text = "${appState.weatherData.feelsLike}"
+                binding.mainFragmentLoadingLayout.visibility = View.GONE
+
+                adapter.setWeather(appState.weatherData)
+
+//                binding.cityName.text = appState.weatherData.city.nameCity
+//                binding.cityCoordinates.text = "${appState.weatherData.city.lat} ${appState.weatherData.city.lon}"
+//                binding.temperatureValue.text = "${appState.weatherData.temperature}"
+//                binding.feelsLikeValue.text = "${appState.weatherData.feelsLike}"
 //                Toast.makeText(requireContext(),"${appState.weatherData.temperature}", Toast.LENGTH_SHORT).show()
             }
         }
@@ -69,5 +81,10 @@ class MainFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = MainFragment()
+    }
+
+    fun restart(){
+        if (isRussian) viewModel.getWeatherFromLocalSourceRus()
+        else viewModel.getWeatherFromLocalSourceWorld()
     }
 }
