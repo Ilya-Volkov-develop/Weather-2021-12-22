@@ -9,11 +9,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
+import ru.iliavolkov.weather.model.Weather
+import ru.iliavolkov.weather.view.details.DetailsFragment
 import ru.iliavolkov.weather.viewmodel.AppState
 import ru.iliavolkov.weather.viewmodel.MainViewModel
-
-class MainFragment : Fragment() {
+const val BUNDLE_KEY ="BUNDLE_KEY"
+class MainFragment : Fragment(),OnItemClickListener {
 
     private var _binding: FragmentMainBinding? = null
     private val binding:FragmentMainBinding
@@ -21,7 +24,7 @@ class MainFragment : Fragment() {
         return _binding!!
     }
 
-    private val adapter = MainFragmentAdapter()
+    private val adapter = MainFragmentAdapter(this)
     private var isRussian = true
 
     override fun onDestroy() {
@@ -59,12 +62,6 @@ class MainFragment : Fragment() {
                 binding.mainFragmentLoadingLayout.visibility = View.GONE
 
                 adapter.setWeather(appState.weatherData)
-
-//                binding.cityName.text = appState.weatherData.city.nameCity
-//                binding.cityCoordinates.text = "${appState.weatherData.city.lat} ${appState.weatherData.city.lon}"
-//                binding.temperatureValue.text = "${appState.weatherData.temperature}"
-//                binding.feelsLikeValue.text = "${appState.weatherData.feelsLike}"
-//                Toast.makeText(requireContext(),"${appState.weatherData.temperature}", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -86,5 +83,11 @@ class MainFragment : Fragment() {
     fun restart(){
         if (isRussian) viewModel.getWeatherFromLocalSourceRus()
         else viewModel.getWeatherFromLocalSourceWorld()
+    }
+
+    override fun onItemClick(weather: Weather) {
+        val bundle = Bundle()
+        bundle.putParcelable(BUNDLE_KEY,weather)
+        requireActivity().supportFragmentManager.beginTransaction().replace(R.id.container,DetailsFragment.newInstance(bundle)).addToBackStack("").commit()
     }
 }
