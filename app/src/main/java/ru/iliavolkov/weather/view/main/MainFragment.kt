@@ -25,7 +25,7 @@ class MainFragment : Fragment(),OnItemClickListener {
     }
 
     private val adapter = MainFragmentAdapter(this)
-    private var isRussian = true
+    private var isRussian = false
 
     override fun onDestroy() {
         super.onDestroy()
@@ -42,6 +42,8 @@ class MainFragment : Fragment(),OnItemClickListener {
         viewModel.getWeatherFromLocalSourceRus()
         binding.mainFragmentFAB.setOnClickListener{
             restart()
+            if (!isRussian) binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
+            else binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
             isRussian = !isRussian
         }
     }
@@ -56,11 +58,9 @@ class MainFragment : Fragment(),OnItemClickListener {
             }
             is AppState.Loading -> {
                 binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
-//                Toast.makeText(requireContext(),"${appState.progress}", Toast.LENGTH_SHORT).show()
             }
             is AppState.Success -> {
                 binding.mainFragmentLoadingLayout.visibility = View.GONE
-
                 adapter.setWeather(appState.weatherData)
             }
         }
