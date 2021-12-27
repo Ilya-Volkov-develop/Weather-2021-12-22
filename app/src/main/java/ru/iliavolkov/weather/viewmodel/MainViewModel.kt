@@ -25,7 +25,7 @@ class MainViewModel(
     fun getWeatherFromLocalServer(isRussian:Boolean){
         Thread{
             liveData.postValue(AppState.Loading(0))
-            sleep(3000)
+            sleep(1000)
 //            when((1..2).random()){
 //              1->liveData.postValue(AppState.Success(repositoryImpl.getWeatherFromServer()))
 //              2->liveData.postValue(AppState.Error("Ошибка"))
