@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.ActivityMainBinding
+import ru.iliavolkov.weather.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package ru.iliavolkov.weather.view
+package ru.iliavolkov.weather.view.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
