@@ -5,15 +5,11 @@ class RepositoryImpl: Repository {
         return Weather()
     }
 
-    override fun getWeatherFromLocalStorage(): Weather {
-        return Weather()
-    }
-
     override fun getWeatherFromLocalStorageRus(): List<Weather> {
-        TODO("Not yet implemented")
+        return getRussianCities()
     }
 
     override fun getWeatherFromLocalStorageWorld(): List<Weather> {
-        TODO("Not yet implemented")
+        return getWorldCities()
     }
 }

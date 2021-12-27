@@ -40,7 +40,7 @@ class MainFragment : Fragment() {
             //is AppState.Error -> Toast.makeText(requireContext(),appState.error.message, Toast.LENGTH_SHORT).show()
             is AppState.Error -> {
                 Toast.makeText(requireContext(),appState.error, Toast.LENGTH_SHORT).show()
-                viewModel.getWeatherFromServer()
+                viewModel.getWeatherFromLocalServer()
             }
             is AppState.Loading -> {
                 binding.loadingLayout.visibility = View.VISIBLE
