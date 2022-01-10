@@ -32,7 +32,13 @@ class MainFragment : Fragment(),OnItemClickListener {
         _binding = null
     }
 
-    lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
+
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentMainBinding.inflate(inflater,container,false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +57,6 @@ class MainFragment : Fragment(),OnItemClickListener {
     @SuppressLint("SetTextI18n")
     private fun renderData(appState: AppState) {
         when(appState){
-            //is AppState.Error -> Toast.makeText(requireContext(),appState.error.message, Toast.LENGTH_SHORT).show()
             is AppState.Error -> {
                 Toast.makeText(requireContext(),appState.error, Toast.LENGTH_SHORT).show()
                 restart()
@@ -67,14 +72,6 @@ class MainFragment : Fragment(),OnItemClickListener {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentMainBinding.inflate(inflater,container,false)
-        return binding.root
-    }
-
     companion object {
         @JvmStatic
         fun newInstance() = MainFragment()
@@ -88,6 +85,8 @@ class MainFragment : Fragment(),OnItemClickListener {
     override fun onItemClick(weather: Weather) {
         val bundle = Bundle()
         bundle.putParcelable(BUNDLE_KEY,weather)
-        requireActivity().supportFragmentManager.beginTransaction().add(R.id.container,DetailsFragment.newInstance(bundle)).addToBackStack("").commit()
+        requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.container,DetailsFragment.newInstance(bundle))
+                .addToBackStack("").commit()
     }
 }
