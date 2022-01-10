@@ -88,6 +88,6 @@ class MainFragment : Fragment(),OnItemClickListener {
     override fun onItemClick(weather: Weather) {
         val bundle = Bundle()
         bundle.putParcelable(BUNDLE_KEY,weather)
-        requireActivity().supportFragmentManager.beginTransaction().replace(R.id.container,DetailsFragment.newInstance(bundle)).addToBackStack("").commit()
+        requireActivity().supportFragmentManager.beginTransaction().add(R.id.container,DetailsFragment.newInstance(bundle)).addToBackStack("").commit()
     }
 }

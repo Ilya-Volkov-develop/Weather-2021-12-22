@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.iliavolkov.weather.model.RepositoryImpl
-import ru.iliavolkov.weather.viewmodel.AppState
 import java.lang.Thread.sleep
 
 class MainViewModel(
