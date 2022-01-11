@@ -1,7 +1,7 @@
 package ru.iliavolkov.weather.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.ActivityMainBinding
 import ru.iliavolkov.weather.view.main.MainFragment

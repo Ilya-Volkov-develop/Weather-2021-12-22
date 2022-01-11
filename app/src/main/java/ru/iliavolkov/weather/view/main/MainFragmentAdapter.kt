@@ -3,7 +3,6 @@ package ru.iliavolkov.weather.view.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.MainRecyclerItemBinding

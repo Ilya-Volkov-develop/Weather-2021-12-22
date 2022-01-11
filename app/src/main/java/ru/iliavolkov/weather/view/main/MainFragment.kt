@@ -2,12 +2,11 @@ package ru.iliavolkov.weather.view.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.iliavolkov.weather.R
@@ -16,6 +15,7 @@ import ru.iliavolkov.weather.model.Weather
 import ru.iliavolkov.weather.view.details.DetailsFragment
 import ru.iliavolkov.weather.viewmodel.AppState
 import ru.iliavolkov.weather.viewmodel.MainViewModel
+
 const val BUNDLE_KEY ="BUNDLE_KEY"
 class MainFragment : Fragment(),OnItemClickListener {
 
