@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
 import ru.iliavolkov.weather.model.Weather
@@ -78,10 +79,15 @@ class MainFragment : Fragment(),OnItemClickListener {
                 is AppState.Success -> {
                     mainFragmentLoadingLayout.visibility = View.GONE
                     adapter.setWeather(appState.weatherData)
+                    binding.root.showSnackBarWithoutActivity("Успешно",Snackbar.LENGTH_SHORT)
                 }
             }
         }
 
+    }
+
+    fun View.showSnackBarWithoutActivity(text:String,length:Int){
+        Snackbar.make(this,text,length).show()
     }
 
     companion object {
