@@ -24,7 +24,9 @@ class MainFragment : Fragment(),OnItemClickListener {
         return _binding!!
     }
 
-    private val adapter = MainFragmentAdapter(this)
+    private val adapter:MainFragmentAdapter by lazy {
+        MainFragmentAdapter(this)
+    }
     private var isRussian = false
 
     override fun onDestroy() {
@@ -32,7 +34,9 @@ class MainFragment : Fragment(),OnItemClickListener {
         _binding = null
     }
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,31 +46,39 @@ class MainFragment : Fragment(),OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
-        binding.mainFragmentRecyclerView.adapter = adapter
+        initView()
+        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         viewModel.getWeatherFromLocalSourceRus()
-        binding.mainFragmentFAB.setOnClickListener{
-            restart()
-            if (!isRussian) binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
-            else binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
-            isRussian = !isRussian
+    }
+
+    private fun initView() {
+        with(binding){
+            mainFragmentRecyclerView.adapter = adapter
+            mainFragmentFAB.setOnClickListener {
+                restart()
+                if (!isRussian) mainFragmentFAB.setImageResource(R.drawable.ic_earth)
+                else mainFragmentFAB.setImageResource(R.drawable.ic_russia)
+                isRussian = !isRussian
+            }
         }
+
     }
 
     @SuppressLint("SetTextI18n")
     private fun renderData(appState: AppState) {
-        when(appState){
-            is AppState.Error -> {
-                Toast.makeText(requireContext(),appState.error, Toast.LENGTH_SHORT).show()
-                restart()
-            }
-            is AppState.Loading -> {
-                binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
-            }
-            is AppState.Success -> {
-                binding.mainFragmentLoadingLayout.visibility = View.GONE
-                adapter.setWeather(appState.weatherData)
+        with(binding){
+            when(appState){
+                is AppState.Error -> {
+                    Toast.makeText(requireContext(),appState.error, Toast.LENGTH_SHORT).show()
+                    restart()
+                }
+                is AppState.Loading -> {
+                    mainFragmentLoadingLayout.visibility = View.VISIBLE
+                }
+                is AppState.Success -> {
+                    mainFragmentLoadingLayout.visibility = View.GONE
+                    adapter.setWeather(appState.weatherData)
+                }
             }
         }
 
@@ -78,15 +90,23 @@ class MainFragment : Fragment(),OnItemClickListener {
     }
 
     fun restart(){
-        if (isRussian) viewModel.getWeatherFromLocalSourceRus()
-        else viewModel.getWeatherFromLocalSourceWorld()
+        with(viewModel){
+            if (isRussian) getWeatherFromLocalSourceRus()
+            else getWeatherFromLocalSourceWorld()
+        }
+
     }
 
     override fun onItemClick(weather: Weather) {
-        val bundle = Bundle()
-        bundle.putParcelable(BUNDLE_KEY,weather)
-        requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.container,DetailsFragment.newInstance(bundle))
-                .addToBackStack("").commit()
+        activity?.run{
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.container,
+                            DetailsFragment.newInstance(
+                                    Bundle().apply {
+                                        putParcelable(BUNDLE_KEY,weather)
+                                    }
+                            ))
+                    .addToBackStack("").commit()
+        }
     }
 }

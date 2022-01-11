@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.iliavolkov.weather.R
+import ru.iliavolkov.weather.databinding.MainRecyclerItemBinding
 import ru.iliavolkov.weather.model.Weather
 
 class MainFragmentAdapter(val listener: OnItemClickListener): RecyclerView.Adapter<MainFragmentAdapter.MainViewHolder>() {
@@ -31,10 +32,11 @@ class MainFragmentAdapter(val listener: OnItemClickListener): RecyclerView.Adapt
 
     inner class MainViewHolder(view:View):RecyclerView.ViewHolder(view){
         fun bind(weather: Weather){
-            itemView.findViewById<TextView>(R.id.mainFragmentRecyclerItemTextView).text = weather.city.nameCity
-            itemView.setOnClickListener{
-                listener.onItemClick(weather)
+            MainRecyclerItemBinding.bind(itemView).run {
+                mainFragmentRecyclerItemTextView.text = weather.city.nameCity
+                root.setOnClickListener{ listener.onItemClick(weather) }
             }
+
 
         }
     }

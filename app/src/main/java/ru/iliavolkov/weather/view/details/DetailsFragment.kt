@@ -23,8 +23,7 @@ class DetailsFragment : Fragment() {
     }
 
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentDetailsBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -32,25 +31,21 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
-        if (weather!=null){
-            with(binding){
-                cityName.text = weather.city.nameCity
-                cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
-                temperatureValue.text = "${weather.temperature}"
-                feelsLikeValue.text = "${weather.feelsLike}"
+//        val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
+        arguments?.let {
+            it.getParcelable<Weather>(BUNDLE_KEY)?.let { weather:Weather ->
+                with(binding){
+                    cityName.text = weather.city.nameCity
+                    cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
+                    temperatureValue.text = "${weather.temperature}"
+                    feelsLikeValue.text = "${weather.feelsLike}"
+                }
             }
-
         }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(bundle: Bundle):DetailsFragment{
-            val fragment = DetailsFragment()
-            fragment.arguments = bundle
-            return fragment
-
-        }
+        fun newInstance(bundle: Bundle) = DetailsFragment().apply{arguments = bundle}
     }
 }
