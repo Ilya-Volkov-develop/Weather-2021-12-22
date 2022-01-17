@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import ru.iliavolkov.weather.model.WeatherDTO
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.lang.Exception
 import java.net.URL
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
@@ -13,20 +14,32 @@ import javax.net.ssl.HttpsURLConnection
 class WeatherLoader(private val onWeatherLoaded:OnWeatherLoader) {
 
     fun loadWeather(lat:Double, lon:Double){
+        val url = URL("https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon")
+        var httpsURLConnection = (url.openConnection() as HttpsURLConnection).apply {
+            requestMethod = "GET"
+            readTimeout = 2000
+            addRequestProperty("X-Yandex-API-Key", "f8120338-96d7-4f36-84c6-173ddb32eaa2")
+        }
+        try {
+            Thread {
 
-        Thread {
-            val url = URL("https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon")
-            val httpsURLConnection = (url.openConnection() as HttpsURLConnection).apply {
-                requestMethod = "GET"
-                readTimeout = 2000
-                addRequestProperty("X-Yandex-API-Key", "f8120338-96d7-4f36-84c6-173ddb32eaa2")
+                val bufferedReader =
+                    BufferedReader(InputStreamReader(httpsURLConnection.inputStream))
+                val weatherDTO: WeatherDTO? =
+                    Gson().fromJson(convertBufferToResult(bufferedReader), WeatherDTO::class.java)
+                Handler(Looper.getMainLooper()).post {
+//                    onWeatherLoaded.onLoaded(weatherDTO)
+                    onWeatherLoaded.onFailed()
+                }
+
+            }.start()
+        } catch (e:Exception){
+            Handler(Looper.getMainLooper()).post {
+                onWeatherLoaded.onFailed()
             }
-            val bufferedReader = BufferedReader(InputStreamReader(httpsURLConnection.inputStream))
-            val weatherDTO:WeatherDTO? = Gson().fromJson(convertBufferToResult(bufferedReader), WeatherDTO::class.java)
-            Handler(Looper.getMainLooper()).post{
-                onWeatherLoaded.onLoaded(weatherDTO)
-            }
-        }.start()
+        } finally {
+            httpsURLConnection.disconnect()
+        }
     }
 
 
