@@ -8,7 +8,6 @@ data class WeatherDTO(
         @SerializedName("now_dt")
         val nowDt: String,
 
-        val info: Info,
         val fact: Fact,
         val forecast: Forecast
 ) {
@@ -97,7 +96,7 @@ data class Part (
         val humidity: Long,
 
         @SerializedName("prec_mm")
-        val precMm: Long,
+        val precMm: Double,
 
         @SerializedName("prec_prob")
         val precProb: Long,
@@ -113,10 +112,4 @@ data class Part (
 
         val daytime: String,
         val polar: Boolean
-)
-
-data class Info (
-        val url: String,
-        val lat: Long,
-        val lon: Long
 )

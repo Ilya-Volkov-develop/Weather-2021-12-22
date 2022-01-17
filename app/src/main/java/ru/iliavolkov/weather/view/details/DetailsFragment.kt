@@ -30,19 +30,15 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
         return binding.root
     }
 
-
+    private val weatherLoader = WeatherLoader(this)
+    lateinit var localWeather:Weather
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
         arguments?.let {
             it.getParcelable<Weather>(BUNDLE_KEY)?.let { weather:Weather ->
-                with(binding){
-                    cityName.text = weather.city.nameCity
-                    cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
-                    temperatureValue.text = "${weather.temperature}"
-                    feelsLikeValue.text = "${weather.feelsLike}"
-                }
-                WeatherLoader(weather.city.lat,weather.city.lon,this).loadWeather()
+                localWeather = weather
+
+                weatherLoader.loadWeather(weather.city.lat,weather.city.lon)
             }
         }
     }
@@ -52,8 +48,16 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
         fun newInstance(bundle: Bundle) = DetailsFragment().apply{arguments = bundle}
     }
 
-    override fun onLoaded(weatherDTO: WeatherDTO) {
-        TODO("Not yet implemented")
+    override fun onLoaded(weatherDTO: WeatherDTO?) {
+        weatherDTO?.let {
+            with(binding){
+                cityName.text = localWeather.city.nameCity
+                cityCoordinates.text = "${localWeather.city.lat} ${localWeather.city.lon}"
+                temperatureValue.text = "${weatherDTO.fact.temp}"
+                feelsLikeValue.text = "${weatherDTO.fact.feelsLike}"
+            }
+        }
+
     }
 
     override fun onFailed() {
