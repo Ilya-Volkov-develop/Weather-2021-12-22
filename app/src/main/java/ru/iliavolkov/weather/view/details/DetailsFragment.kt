@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.iliavolkov.weather.databinding.FragmentDetailsBinding
 import ru.iliavolkov.weather.model.Weather
+import ru.iliavolkov.weather.model.WeatherDTO
+import ru.iliavolkov.weather.utils.WeatherLoader
 
 const val BUNDLE_KEY ="BUNDLE_KEY"
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoader {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding:FragmentDetailsBinding
@@ -40,6 +42,7 @@ class DetailsFragment : Fragment() {
                     temperatureValue.text = "${weather.temperature}"
                     feelsLikeValue.text = "${weather.feelsLike}"
                 }
+                WeatherLoader(weather.city.lat,weather.city.lon,this).loadWeather()
             }
         }
     }
@@ -47,5 +50,13 @@ class DetailsFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(bundle: Bundle) = DetailsFragment().apply{arguments = bundle}
+    }
+
+    override fun onLoaded(weatherDTO: WeatherDTO) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFailed() {
+        TODO("Not yet implemented")
     }
 }

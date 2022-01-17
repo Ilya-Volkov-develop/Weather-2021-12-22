@@ -2,7 +2,16 @@ package ru.iliavolkov.weather.model
 
 import com.google.gson.annotations.SerializedName
 
-class WeatherDTO {
+data class WeatherDTO(
+        val now: Long,
+
+        @SerializedName("now_dt")
+        val nowDt: String,
+
+        val info: Info,
+        val fact: Fact,
+        val forecast: Forecast
+) {
 }
 
 data class Fact (
