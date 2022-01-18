@@ -2,5 +2,6 @@
     <string name="app_name">Погода</string>
     <string name="temperature_label">Температура</string>
     <string name="feels_like_label">Ощущается как</string>
-
+    <string name="errorOnServer">Ошибка на сервере, попробуйте позже</string>
+    <string name="exit">Выйти</string>
 </resources>

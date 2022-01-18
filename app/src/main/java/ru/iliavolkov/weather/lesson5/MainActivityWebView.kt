@@ -7,7 +7,6 @@ import ru.iliavolkov.weather.databinding.ActivityMainWebviewBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
-import java.util.stream.Collector
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 

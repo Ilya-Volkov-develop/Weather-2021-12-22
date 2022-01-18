@@ -86,7 +86,7 @@ class MainFragment : Fragment(),OnItemClickListener {
 
     }
 
-    fun View.showSnackBarWithoutActivity(text:String,length:Int){
+    private fun View.showSnackBarWithoutActivity(text:String, length:Int){
         Snackbar.make(this,text,length).show()
     }
 
@@ -107,8 +107,7 @@ class MainFragment : Fragment(),OnItemClickListener {
         activity?.run{
             supportFragmentManager.beginTransaction()
                     .add(R.id.container,
-                            DetailsFragment.newInstance(
-                                    Bundle().apply {
+                            DetailsFragment.newInstance(Bundle().apply {
                                         putParcelable(BUNDLE_KEY,weather)
                                     }
                             ))
