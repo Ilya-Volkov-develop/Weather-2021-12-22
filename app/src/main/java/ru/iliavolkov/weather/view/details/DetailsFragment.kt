@@ -56,7 +56,7 @@ class DetailsFragment  :Fragment(), WeatherLoader.OnWeatherLoader {
                 temperatureLabel.visibility = View.VISIBLE
                 feelsLikeLabel.visibility = View.VISIBLE
                 cityName.text = localWeather.city.nameCity
-                cityCoordinates.text = "${localWeather.city.lat} ${localWeather.city.lon}"
+                cityCoordinates.text = "${weatherDTO.info.lat} ${weatherDTO.info.lon}"
                 temperatureValue.text = "${weatherDTO.fact.temp}"
                 feelsLikeValue.text = "${weatherDTO.fact.feelsLike}"
             }

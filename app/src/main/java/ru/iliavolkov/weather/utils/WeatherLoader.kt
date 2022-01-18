@@ -3,6 +3,7 @@ package ru.iliavolkov.weather.utils
 import android.os.Handler
 import android.os.Looper
 import com.google.gson.Gson
+import ru.iliavolkov.weather.BuildConfig
 import ru.iliavolkov.weather.model.WeatherDTO
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -17,7 +18,7 @@ class WeatherLoader(private val onWeatherLoaded:OnWeatherLoader) {
         val httpsURLConnection = (url.openConnection() as HttpsURLConnection).apply {
             requestMethod = "GET"
             readTimeout = 2000
-            addRequestProperty("X-Yandex-API-Key", "f8120338-96d7-4f36-84c6-173ddb32eaa2")
+            addRequestProperty(API_KEY, BuildConfig.WEATHER_API_KEY)
         }
         try {
             Thread {

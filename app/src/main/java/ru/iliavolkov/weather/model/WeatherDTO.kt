@@ -9,7 +9,8 @@ data class WeatherDTO(
         val nowDt: String,
 
         val fact: Fact,
-        val forecast: Forecast
+        val forecast: Forecast,
+        val info: Info
 ) {
 }
 
@@ -112,4 +113,10 @@ data class Part (
 
         val daytime: String,
         val polar: Boolean
+)
+
+data class Info(
+        val url:String,
+        val lat:Double,
+        val lon:Double
 )
