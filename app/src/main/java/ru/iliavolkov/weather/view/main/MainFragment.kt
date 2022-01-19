@@ -8,35 +8,29 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
 import ru.iliavolkov.weather.model.Weather
+import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
 import ru.iliavolkov.weather.view.details.DetailsFragment
 import ru.iliavolkov.weather.viewmodel.AppState
 import ru.iliavolkov.weather.viewmodel.MainViewModel
 
-const val BUNDLE_KEY ="BUNDLE_KEY"
 class MainFragment : Fragment(),OnItemClickListener {
 
+    private var isRussian = false
     private var _binding: FragmentMainBinding? = null
-    private val binding:FragmentMainBinding
-    get(){
-        return _binding!!
-    }
+    private val binding get() = _binding!!
 
     private val adapter:MainFragmentAdapter by lazy {
         MainFragmentAdapter(this)
     }
-    private var isRussian = false
-
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMainBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -91,7 +85,7 @@ class MainFragment : Fragment(),OnItemClickListener {
             supportFragmentManager.beginTransaction()
                     .add(R.id.container,
                             DetailsFragment.newInstance(Bundle().apply {
-                                        putParcelable(BUNDLE_KEY,weather)
+                                        putParcelable(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT,weather)
                                     }
                             ))
                     .addToBackStack("").commit()

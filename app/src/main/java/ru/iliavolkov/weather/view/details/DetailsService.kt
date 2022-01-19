@@ -24,6 +24,7 @@ class DetailsService(name:String=""):IntentService(name) {
     }
 
     fun loadWeather(lat:Double, lon:Double){
+
         val url = URL("https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon")
         val httpsURLConnection = (url.openConnection() as HttpsURLConnection).apply {
             requestMethod = "GET"
@@ -32,15 +33,12 @@ class DetailsService(name:String=""):IntentService(name) {
         }
         val bufferedReader = BufferedReader(InputStreamReader(httpsURLConnection.inputStream))
         val weatherDTO: WeatherDTO? = Gson().fromJson(convertBufferToResult(bufferedReader), WeatherDTO::class.java)
-
         LocalBroadcastManager.getInstance(applicationContext).
             sendBroadcast(Intent(BROADCAST_ACTION).apply {
                 putExtra(BUNDLE_KEY_WEATHER,weatherDTO)
             })
-
-        httpsURLConnection.disconnect()
+            httpsURLConnection.disconnect()
     }
-
 
     private fun convertBufferToResult(buffer: BufferedReader):String {
         return buffer.lines().collect(Collectors.joining("\n"))
