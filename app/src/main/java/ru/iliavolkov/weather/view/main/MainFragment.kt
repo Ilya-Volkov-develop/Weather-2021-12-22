@@ -30,10 +30,6 @@ class MainFragment : Fragment(),OnItemClickListener {
     }
     private var isRussian = false
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
@@ -79,29 +75,16 @@ class MainFragment : Fragment(),OnItemClickListener {
                 is AppState.Success -> {
                     mainFragmentLoadingLayout.visibility = View.GONE
                     adapter.setWeather(appState.weatherData)
-                    binding.root.showSnackBarWithoutActivity("Успешно",Snackbar.LENGTH_SHORT)
+                    //binding.root.showSnackBarWithoutActivity("Успешно",Snackbar.LENGTH_SHORT)
                 }
             }
         }
 
     }
 
-    private fun View.showSnackBarWithoutActivity(text:String, length:Int){
-        Snackbar.make(this,text,length).show()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = MainFragment()
-    }
-
-    fun restart(){
-        with(viewModel){
-            if (isRussian) getWeatherFromLocalSourceRus()
-            else getWeatherFromLocalSourceWorld()
-        }
-
-    }
+//    private fun View.showSnackBarWithoutActivity(text:String, length:Int){
+//        Snackbar.make(this,text,length).show()
+//    }
 
     override fun onItemClick(weather: Weather) {
         activity?.run{
@@ -113,5 +96,23 @@ class MainFragment : Fragment(),OnItemClickListener {
                             ))
                     .addToBackStack("").commit()
         }
+    }
+
+    fun restart(){
+        with(viewModel){
+            if (isRussian) getWeatherFromLocalSourceRus()
+            else getWeatherFromLocalSourceWorld()
+        }
+
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = MainFragment()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

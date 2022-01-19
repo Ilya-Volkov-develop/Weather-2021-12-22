@@ -1,4 +1,8 @@
 package ru.iliavolkov.weather.utils
 
-const val BUNDLE_KEY ="BUNDLE_KEY"
-const val API_KEY = "X-Yandex-API-Key"
+const val BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT ="BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT"
+const val API_KEY_NAME = "X-Yandex-API-Key"
+const val KEY_LAT = "KEY_LAT"
+const val KEY_LON = "KEY_LON"
+const val BUNDLE_KEY_WEATHER = "BUNDLE_KEY_WEATHER"
+const val BROADCAST_ACTION = "BROADCAST_ACTION"

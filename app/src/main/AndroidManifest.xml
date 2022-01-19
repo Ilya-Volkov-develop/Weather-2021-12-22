@@ -21,6 +21,9 @@
         <activity android:name=".lesson5.MainActivityWebView">
 
         </activity>
+
+        <service android:name=".view.details.DetailsService"/>
+
     </application>
 
 </manifest>
