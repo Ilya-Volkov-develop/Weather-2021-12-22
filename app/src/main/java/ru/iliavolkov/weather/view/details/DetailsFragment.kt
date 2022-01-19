@@ -1,8 +1,6 @@
 package ru.iliavolkov.weather.view.details
 
 import android.app.AlertDialog
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -16,10 +14,14 @@ import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentDetailsBinding
 import ru.iliavolkov.weather.model.Weather
 import ru.iliavolkov.weather.model.WeatherDTO
-import ru.iliavolkov.weather.utils.*
+import ru.iliavolkov.weather.utils.BROADCAST_ACTION
+import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
+import ru.iliavolkov.weather.utils.KEY_LAT
+import ru.iliavolkov.weather.utils.KEY_LON
 
-class DetailsFragment  :Fragment() {
+class DetailsFragment  :Fragment(),DetailsReceiver.ReceiverTotal {
 
+    private val receiver = DetailsReceiver(this)
     lateinit var localWeather: Weather
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
@@ -29,21 +31,6 @@ class DetailsFragment  :Fragment() {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
-    private val receiver:BroadcastReceiver = object : BroadcastReceiver(){
-        override fun onReceive(context: Context?, intent: Intent?) {
-            intent?.let{
-                val weather = it.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER)
-                if (weather != null){
-                    setWeatherData(weather)
-                } else {
-                    loadingFailed()
-                }
-
-            }
-        }
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -85,6 +72,14 @@ class DetailsFragment  :Fragment() {
             requireActivity().onBackPressed()
         }
         dialog1?.show()
+    }
+
+    override fun success(weatherDTO: WeatherDTO) {
+        setWeatherData(weatherDTO)
+    }
+
+    override fun error() {
+        loadingFailed()
     }
 
     override fun onDestroy() {

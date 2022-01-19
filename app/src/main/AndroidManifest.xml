@@ -3,6 +3,7 @@
     package="ru.iliavolkov.weather">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -18,12 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lesson5.MainActivityWebView">
-
-        </activity>
 
         <service android:name=".view.details.DetailsService"/>
-
+        <receiver android:name=".lesson6.MyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_ACTION"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

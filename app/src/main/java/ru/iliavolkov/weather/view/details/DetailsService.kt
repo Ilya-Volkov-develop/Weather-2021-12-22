@@ -37,7 +37,7 @@ class DetailsService(name:String=""):IntentService(name) {
             sendBroadcast(Intent(BROADCAST_ACTION).apply {
                 putExtra(BUNDLE_KEY_WEATHER,weatherDTO)
             })
-            httpsURLConnection.disconnect()
+        httpsURLConnection.disconnect()
     }
 
     private fun convertBufferToResult(buffer: BufferedReader):String {
