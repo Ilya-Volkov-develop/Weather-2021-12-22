@@ -20,25 +20,23 @@ class WeatherLoader(private val onWeatherLoaded:OnWeatherLoader) {
             readTimeout = 2000
             addRequestProperty(API_KEY, BuildConfig.WEATHER_API_KEY)
         }
-        try {
-            Thread {
-
+        Thread {
+            try {
                 val bufferedReader =
-                    BufferedReader(InputStreamReader(httpsURLConnection.inputStream))
+                        BufferedReader(InputStreamReader(httpsURLConnection.inputStream))
                 val weatherDTO: WeatherDTO? =
-                    Gson().fromJson(convertBufferToResult(bufferedReader), WeatherDTO::class.java)
+                        Gson().fromJson(convertBufferToResult(bufferedReader), WeatherDTO::class.java)
                 Handler(Looper.getMainLooper()).post {
                     onWeatherLoaded.onLoaded(weatherDTO)
                 }
-
-            }.start()
-        } catch (e:Exception){
-            Handler(Looper.getMainLooper()).post {
-                onWeatherLoaded.onFailed()
+            } catch (e:Exception){
+                Handler(Looper.getMainLooper()).post {
+                    onWeatherLoaded.onFailed()
+                }
+            } finally {
+                httpsURLConnection.disconnect()
             }
-        } finally {
-            httpsURLConnection.disconnect()
-        }
+        }.start()
     }
 
 
