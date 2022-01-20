@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".view.details.DetailsService"/>
+
         <receiver android:name=".lesson6.MyBroadcastReceiver"
             android:enabled="true"
             android:exported="true">

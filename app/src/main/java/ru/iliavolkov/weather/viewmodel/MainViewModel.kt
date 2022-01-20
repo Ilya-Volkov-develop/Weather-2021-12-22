@@ -2,13 +2,15 @@ package ru.iliavolkov.weather.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.iliavolkov.weather.model.RepositoryImpl
+import ru.iliavolkov.weather.repository.RepositoryImpl
 import java.lang.Thread.sleep
 
-class MainViewModel(
-        private val liveData: MutableLiveData<AppState> = MutableLiveData(),
-        private val repositoryImpl:RepositoryImpl = RepositoryImpl()
-): ViewModel() {
+class MainViewModel(private val liveData: MutableLiveData<AppState> = MutableLiveData()): ViewModel() {
+
+    private val repositoryImpl: RepositoryImpl by lazy {
+        RepositoryImpl()
+    }
+
 
     fun getLiveData() = liveData
 
