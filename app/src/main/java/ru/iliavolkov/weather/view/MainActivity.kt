@@ -13,7 +13,7 @@ import ru.iliavolkov.weather.view.main.MainFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
+    private val receiver = MyBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.container, MainFragment.newInstance()).commit()
         }
 
-        registerReceiver(MyBroadcastReceiver(), IntentFilter(CONNECTIVITY_ACTION))
+        registerReceiver(receiver, IntentFilter(CONNECTIVITY_ACTION))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
     }
 }
