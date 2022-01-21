@@ -4,4 +4,6 @@
     <string name="feels_like_label">Ощущается как</string>
     <string name="errorOnServer">Ошибка на сервере, попробуйте позже</string>
     <string name="exit">Выйти</string>
+    <string name="error">Ошибка</string>
+    <string name="codeError">Код ошибки</string>
 </resources>

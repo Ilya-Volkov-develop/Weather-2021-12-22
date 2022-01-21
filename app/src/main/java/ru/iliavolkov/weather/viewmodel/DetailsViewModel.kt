@@ -43,7 +43,7 @@ class DetailsViewModel(private val liveData: MutableLiveData<AppStateWeather> = 
                     liveData.postValue(AppStateWeather.Success(convertDTOtoModel(Gson().fromJson(jsonString,WeatherDTO::class.java))))
                 }
             } else{
-                liveData.postValue(AppStateWeather.Error("forbidden"))
+                liveData.postValue(AppStateWeather.Error(response.code().toString()))
             }
         }
 

@@ -2,11 +2,13 @@ package ru.iliavolkov.weather.view.details
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.iliavolkov.weather.R
@@ -51,7 +53,7 @@ class DetailsFragment  :Fragment() {
         with(binding){
             when(appStateWeather){
                 is AppStateWeather.Error -> {
-                    loadingFailed()
+                    loadingFailed(appStateWeather.error)
                 }
                 is AppStateWeather.Loading -> {
                     loadingLayout.visibility = View.VISIBLE
@@ -80,13 +82,15 @@ class DetailsFragment  :Fragment() {
     }
 
     //при ошибке всплывает диалоговое окно
-    private fun loadingFailed() {
+    private fun loadingFailed(code: String) {
         val dialog: AlertDialog.Builder = AlertDialog.Builder(requireContext())
         val inflater: LayoutInflater? = LayoutInflater.from(requireContext())
         val exitView: View = inflater!!.inflate(R.layout.dialog_error, null)
         dialog.setView(exitView)
-        val dialog1: android.app.Dialog? = dialog.create()
+        val dialog1: Dialog? = dialog.create()
         val ok: Button = exitView.findViewById(R.id.ok)
+        val codeTextView = exitView.findViewById<TextView>(R.id.codeTextView)
+        codeTextView.text = codeTextView.text.toString() + " " + code
         dialog1?.setCancelable(false)
         ok.setOnClickListener {
             dialog1?.dismiss()
