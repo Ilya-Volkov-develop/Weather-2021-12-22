@@ -14,7 +14,7 @@ import ru.iliavolkov.weather.utils.YANDEX_API_URL
 import ru.iliavolkov.weather.utils.YANDEX_API_URL_END_POINT
 import java.io.IOException
 
-class DetailsViewModel(private val liveData: MutableLiveData<AppState> = MutableLiveData()): ViewModel() {
+class DetailsViewModel(private val liveData: MutableLiveData<AppStateWeather> = MutableLiveData()): ViewModel() {
 
     private val repositoryImpl: RepositoryImpl by lazy {
         RepositoryImpl()
@@ -23,12 +23,12 @@ class DetailsViewModel(private val liveData: MutableLiveData<AppState> = Mutable
     fun getLiveData() = liveData
 
     fun getWeatherFromRemoteServer(lat:String,lon:String){
-        liveData.postValue(AppState.Loading(0))
+        liveData.postValue(AppStateWeather.Loading(0))
         repositoryImpl.getWeatherFromServer(YANDEX_API_URL + YANDEX_API_URL_END_POINT + "?lat=${lat}&lon=${lon}",callback)
     }
 
-    fun convertDTOtoModel(weatherDTO: WeatherDTO):List<Weather>{
-        return listOf(Weather(getDefaultCity(),weatherDTO.fact.temp.toInt(),weatherDTO.fact.feelsLike.toInt()))
+    fun convertDTOtoModel(weatherDTO: WeatherDTO):Weather{
+        return Weather(getDefaultCity(),weatherDTO.fact.temp.toInt(),weatherDTO.fact.feelsLike.toInt())
     }
 
     private val callback = object :Callback{
@@ -40,10 +40,10 @@ class DetailsViewModel(private val liveData: MutableLiveData<AppState> = Mutable
             if (response.isSuccessful){
                 response.body()?.let {
                     val jsonString = it.toString()
-                    liveData.postValue(AppState.Success(convertDTOtoModel(Gson().fromJson(jsonString,WeatherDTO::class.java))))
+                    liveData.postValue(AppStateWeather.Success(convertDTOtoModel(Gson().fromJson(jsonString,WeatherDTO::class.java))))
                 }
             } else{
-                liveData.postValue(AppState.Error("forbidden"))
+                liveData.postValue(AppStateWeather.Error("forbidden"))
             }
         }
 

@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentDetailsBinding
+import ru.iliavolkov.weather.model.City
 import ru.iliavolkov.weather.model.Weather
+import ru.iliavolkov.weather.model.WeatherDTO
 import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
-import ru.iliavolkov.weather.viewmodel.AppState
+import ru.iliavolkov.weather.viewmodel.AppStateWeather
 import ru.iliavolkov.weather.viewmodel.DetailsViewModel
 
 class DetailsFragment  :Fragment() {
@@ -38,26 +40,25 @@ class DetailsFragment  :Fragment() {
             renderData(it)
         })
         arguments?.let {
-            it.getParcelable<Weather>(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT)?.let { weather ->
-                localWeather = weather
-                viewModel.getWeatherFromRemoteServer(localWeather.city.lat.toString(),localWeather.city.lon.toString())
+            it.getParcelable<City>(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT)?.let { city ->
+                viewModel.getWeatherFromRemoteServer(city.lat.toString(),city.lon.toString())
             }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun renderData(appState: AppState) {
+    private fun renderData(appStateWeather: AppStateWeather) {
         with(binding){
-            when(appState){
-                is AppState.Error -> {
+            when(appStateWeather){
+                is AppStateWeather.Error -> {
                     loadingFailed()
                 }
-                is AppState.Loading -> {
+                is AppStateWeather.Loading -> {
                     loadingLayout.visibility = View.VISIBLE
                 }
-                is AppState.Success -> {
+                is AppStateWeather.Success -> {
                     loadingLayout.visibility = View.GONE
-                    val weather = appState.weatherData[0]
+                    val weather = appStateWeather.weatherData
                     setWeatherData(weather)
                 }
             }

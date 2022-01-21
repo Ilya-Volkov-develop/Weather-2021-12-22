@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainRecyclerCityItemBinding
-import ru.iliavolkov.weather.model.Weather
+import ru.iliavolkov.weather.model.City
 
 class MainFragmentAdapter(val listener: OnItemClickListener): RecyclerView.Adapter<MainFragmentAdapter.MainViewHolder>() {
 
-    private var weatherData:List<Weather> = listOf()
+    private var cityData:List<City> = listOf()
 
-    fun setWeather(data:List<Weather>){
-        this.weatherData = data
+    fun setWeather(data:List<City>){
+        this.cityData = data
         notifyDataSetChanged()
     }
 
@@ -22,18 +22,18 @@ class MainFragmentAdapter(val listener: OnItemClickListener): RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.bind(this.weatherData[position])
+        holder.bind(this.cityData[position])
     }
 
     override fun getItemCount(): Int {
-        return weatherData.size
+        return cityData.size
     }
 
     inner class MainViewHolder(view:View):RecyclerView.ViewHolder(view){
-        fun bind(weather: Weather){
+        fun bind(city: City){
             FragmentMainRecyclerCityItemBinding.bind(itemView).run {
-                mainFragmentRecyclerItemTextView.text = weather.city.nameCity
-                root.setOnClickListener{ listener.onItemClick(weather) }
+                mainFragmentRecyclerItemTextView.text = city.nameCity
+                root.setOnClickListener{ listener.onItemClick(city) }
             }
 
 

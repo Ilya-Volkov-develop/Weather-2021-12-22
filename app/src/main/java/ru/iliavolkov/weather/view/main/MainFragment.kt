@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
-import ru.iliavolkov.weather.model.Weather
+import ru.iliavolkov.weather.model.City
 import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
 import ru.iliavolkov.weather.view.details.DetailsFragment
-import ru.iliavolkov.weather.viewmodel.AppState
+import ru.iliavolkov.weather.viewmodel.AppStateCity
 import ru.iliavolkov.weather.viewmodel.MainViewModel
 
 class MainFragment : Fragment(),OnItemClickListener {
@@ -56,19 +56,19 @@ class MainFragment : Fragment(),OnItemClickListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun renderData(appState: AppState) {
+    private fun renderData(appStateCity: AppStateCity) {
         with(binding){
-            when(appState){
-                is AppState.Error -> {
-                    Toast.makeText(requireContext(),appState.error, Toast.LENGTH_SHORT).show()
+            when(appStateCity){
+                is AppStateCity.Error -> {
+                    Toast.makeText(requireContext(),appStateCity.error, Toast.LENGTH_SHORT).show()
                     restart()
                 }
-                is AppState.Loading -> {
+                is AppStateCity.Loading -> {
                     mainFragmentLoadingLayout.visibility = View.VISIBLE
                 }
-                is AppState.Success -> {
+                is AppStateCity.Success -> {
                     mainFragmentLoadingLayout.visibility = View.GONE
-                    adapter.setWeather(appState.weatherData)
+                    adapter.setWeather(appStateCity.cityData)
                     //binding.root.showSnackBarWithoutActivity("Успешно",Snackbar.LENGTH_SHORT)
                 }
             }
@@ -80,12 +80,12 @@ class MainFragment : Fragment(),OnItemClickListener {
 //        Snackbar.make(this,text,length).show()
 //    }
 
-    override fun onItemClick(weather: Weather) {
+    override fun onItemClick(city: City) {
         activity?.run{
             supportFragmentManager.beginTransaction()
                     .add(R.id.container,
                             DetailsFragment.newInstance(Bundle().apply {
-                                        putParcelable(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT,weather)
+                                        putParcelable(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT,city)
                                     }
                             ))
                     .addToBackStack("").commit()

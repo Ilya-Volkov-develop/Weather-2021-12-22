@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import ru.iliavolkov.weather.repository.RepositoryImpl
 import java.lang.Thread.sleep
 
-class MainViewModel(private val liveData: MutableLiveData<AppState> = MutableLiveData()): ViewModel() {
+class MainViewModel(private val liveData: MutableLiveData<AppStateCity> = MutableLiveData()): ViewModel() {
 
     private val repositoryImpl: RepositoryImpl by lazy {
         RepositoryImpl()
@@ -22,9 +22,9 @@ class MainViewModel(private val liveData: MutableLiveData<AppState> = MutableLiv
 
     fun getWeatherFromLocalServer(isRussian:Boolean){
         Thread{
-            liveData.postValue(AppState.Loading(0))
+            liveData.postValue(AppStateCity.Loading(0))
             sleep(1000)
-            liveData.postValue(AppState.Success(
+            liveData.postValue(AppStateCity.Success(
                     repositoryImpl.run {
                         if (isRussian) getWeatherFromLocalStorageRus()
                         else getWeatherFromLocalStorageWorld()
