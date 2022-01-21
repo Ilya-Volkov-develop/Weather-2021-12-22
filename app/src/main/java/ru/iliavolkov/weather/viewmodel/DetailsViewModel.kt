@@ -39,7 +39,7 @@ class DetailsViewModel(private val liveData: MutableLiveData<AppStateWeather> = 
         override fun onResponse(call: Call, response: Response) {
             if (response.isSuccessful){
                 response.body()?.let {
-                    val jsonString = it.toString()
+                    val jsonString = it.string()
                     liveData.postValue(AppStateWeather.Success(convertDTOtoModel(Gson().fromJson(jsonString,WeatherDTO::class.java))))
                 }
             } else{

@@ -13,7 +13,6 @@ import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentDetailsBinding
 import ru.iliavolkov.weather.model.City
 import ru.iliavolkov.weather.model.Weather
-import ru.iliavolkov.weather.model.WeatherDTO
 import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
 import ru.iliavolkov.weather.viewmodel.AppStateWeather
 import ru.iliavolkov.weather.viewmodel.DetailsViewModel
@@ -41,6 +40,7 @@ class DetailsFragment  :Fragment() {
         })
         arguments?.let {
             it.getParcelable<City>(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT)?.let { city ->
+                localWeather = Weather(city,city.lat.toInt(),city.lon.toInt())
                 viewModel.getWeatherFromRemoteServer(city.lat.toString(),city.lon.toString())
             }
         }
