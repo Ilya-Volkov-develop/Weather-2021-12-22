@@ -43,7 +43,7 @@ class DetailsFragment  :Fragment() {
         arguments?.let {
             it.getParcelable<City>(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT)?.let { city ->
                 localWeather = Weather(city,city.lat.toInt(),city.lon.toInt())
-                viewModel.getWeatherFromRemoteServer(city.lat.toString(),city.lon.toString())
+                viewModel.getWeatherFromRemoteServer(city.lat,city.lon)
             }
         }
     }

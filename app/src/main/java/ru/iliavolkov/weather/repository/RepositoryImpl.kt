@@ -1,25 +1,30 @@
 package ru.iliavolkov.weather.repository
 
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.google.gson.GsonBuilder
+import retrofit2.Callback
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import ru.iliavolkov.weather.BuildConfig
+import ru.iliavolkov.weather.model.WeatherDTO
 import ru.iliavolkov.weather.model.getRussianCities
 import ru.iliavolkov.weather.model.getWorldCities
-import ru.iliavolkov.weather.utils.API_KEY_NAME
+import ru.iliavolkov.weather.utils.YANDEX_API_URL
 
 class RepositoryImpl: RepositoryLocalWeatherList,RepositoryDetails {
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(YANDEX_API_URL)
+        .addConverterFactory(GsonConverterFactory.create(
+            GsonBuilder().setLenient().create()
+        ))
+        .build().create(WeatherApi::class.java)
 
     override fun getWeatherFromLocalStorageRus() = getRussianCities()
 
     override fun getWeatherFromLocalStorageWorld() = getWorldCities()
 
-    override fun getWeatherFromServer(url: String, callBack: Callback) {
-        val builder = Request.Builder().apply {
-            header(API_KEY_NAME,BuildConfig.WEATHER_API_KEY)
-            url(url)
-        }
-        OkHttpClient().newCall(builder.build()).enqueue(callBack)
+    override fun getWeatherFromServer(lat:Double, lon:Double, callBack: Callback<WeatherDTO>) {
+        retrofit.getWeather(BuildConfig.WEATHER_API_KEY,lat,lon).enqueue(callBack)
     }
 
 }

@@ -1,7 +1,8 @@
 package ru.iliavolkov.weather.repository
 
-import okhttp3.Callback
+import retrofit2.Callback
+import ru.iliavolkov.weather.model.WeatherDTO
 
 interface RepositoryDetails {
-    fun getWeatherFromServer(url:String,callBack: Callback)
+    fun getWeatherFromServer(lat:Double, lon:Double,callBack: Callback<WeatherDTO>)
 }
