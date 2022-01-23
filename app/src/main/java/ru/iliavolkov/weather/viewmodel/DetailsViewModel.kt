@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.model.Weather
 import ru.iliavolkov.weather.model.WeatherDTO
 import ru.iliavolkov.weather.model.getDefaultCity
@@ -29,16 +30,16 @@ class DetailsViewModel(private val liveData: MutableLiveData<AppStateWeather> = 
 
     private val callback = object :Callback<WeatherDTO>{
         override fun onFailure(call: Call<WeatherDTO>, t: Throwable) {
-            TODO("Not yet implemented")
+            liveData.postValue(AppStateWeather.Error(R.string.errorOnServer,0))
         }
 
         override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
             if (response.isSuccessful){
                 response.body()?.let {
-                    liveData.postValue(AppStateWeather.Success(convertDTOtoModel(it)))
+                    liveData.postValue(AppStateWeather.Success(convertDTOtoModel(it),it.fact.icon,it.fact.condition))
                 }
             } else{
-                liveData.postValue(AppStateWeather.Error(response.code().toString()))
+                liveData.postValue(AppStateWeather.Error(R.string.codeError,response.code()))
             }
         }
 
