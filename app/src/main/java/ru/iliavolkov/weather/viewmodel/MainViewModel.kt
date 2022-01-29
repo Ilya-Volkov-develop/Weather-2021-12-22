@@ -2,13 +2,13 @@ package ru.iliavolkov.weather.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.iliavolkov.weather.repository.RepositoryImpl
+import ru.iliavolkov.weather.repository.RepositoriesLocalCitiesImpl
 import java.lang.Thread.sleep
 
 class MainViewModel(private val liveData: MutableLiveData<AppStateCity> = MutableLiveData()): ViewModel() {
 
-    private val repositoryImpl: RepositoryImpl by lazy {
-        RepositoryImpl()
+    private val repositoriesLocalCitiesImpl: RepositoriesLocalCitiesImpl by lazy {
+        RepositoriesLocalCitiesImpl()
     }
 
 
@@ -20,12 +20,12 @@ class MainViewModel(private val liveData: MutableLiveData<AppStateCity> = Mutabl
 
     fun getWeatherFromRemoteSource() = getWeatherFromLocalServer(isRussian = true)//заглука 5 урок
 
-    fun getWeatherFromLocalServer(isRussian:Boolean){
+    private fun getWeatherFromLocalServer(isRussian:Boolean){
         Thread{
             liveData.postValue(AppStateCity.Loading(0))
             sleep(1000)
             liveData.postValue(AppStateCity.Success(
-                    repositoryImpl.run {
+                repositoriesLocalCitiesImpl.run {
                         if (isRussian) getWeatherFromLocalStorageRus()
                         else getWeatherFromLocalStorageWorld()
                     }))

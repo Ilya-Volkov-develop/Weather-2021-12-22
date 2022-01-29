@@ -6,11 +6,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.iliavolkov.weather.BuildConfig
 import ru.iliavolkov.weather.model.WeatherDTO
-import ru.iliavolkov.weather.model.getRussianCities
-import ru.iliavolkov.weather.model.getWorldCities
 import ru.iliavolkov.weather.utils.YANDEX_API_URL
 
-class RepositoryImpl: RepositoryLocalWeatherList,RepositoryDetails {
+class RepositoryRemoteImpl: RepositoryDetails {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(YANDEX_API_URL)
@@ -18,10 +16,6 @@ class RepositoryImpl: RepositoryLocalWeatherList,RepositoryDetails {
             GsonBuilder().setLenient().create()
         ))
         .build().create(WeatherApi::class.java)
-
-    override fun getWeatherFromLocalStorageRus() = getRussianCities()
-
-    override fun getWeatherFromLocalStorageWorld() = getWorldCities()
 
     override fun getWeatherFromServer(lat:Double, lon:Double, callBack: Callback<WeatherDTO>) {
         retrofit.getWeather(BuildConfig.WEATHER_API_KEY,lat,lon).enqueue(callBack)

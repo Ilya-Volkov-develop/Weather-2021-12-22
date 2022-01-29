@@ -102,7 +102,11 @@ class DetailsFragment  :Fragment() {
     //Устанавливаем данные в фрагмент
     @SuppressLint("SetTextI18n")
     private fun setWeatherData(weather: Weather, urlIcon: String, conditionText: String) {
+
         with(binding){
+            iconWeather.setOnClickListener {
+                viewModel.saveWeather(weather)
+            }
             temperatureLabel.visibility = View.VISIBLE
             feelsLikeLabel.visibility = View.VISIBLE
             cityName.text = localWeather.city.nameCity

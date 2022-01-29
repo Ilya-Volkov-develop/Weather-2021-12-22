@@ -20,7 +20,9 @@ class App:Application() {
                 if (appInstance==null){
                     throw IllformedLocaleException("Всё плохо")
                 } else{
-                    db = Room.databaseBuilder(appInstance!!.applicationContext,HistoryDatabase::class.java, DB_NAME).build()
+                    db = Room.databaseBuilder(appInstance!!.applicationContext,HistoryDatabase::class.java, DB_NAME)
+                        .allowMainThreadQueries()
+                        .build()
                 }
             }
             return db!!.historyWeatherDao()
