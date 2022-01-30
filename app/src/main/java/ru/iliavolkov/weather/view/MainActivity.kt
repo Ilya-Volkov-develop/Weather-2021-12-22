@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                         .add(R.id.container, HistoryFragment.newInstance()).addToBackStack("").commit()
                 true
             }
-            R.id.menu_content -> {
+            R.id.menu_contacts -> {
                 supportFragmentManager.beginTransaction()
                     .add(R.id.container, ContactsFragment.newInstance()).addToBackStack("").commit()
                 true

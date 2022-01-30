@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.iliavolkov.weather.databinding.FragmentHistoryBinding
-import ru.iliavolkov.weather.model.Weather
 import ru.iliavolkov.weather.viewmodel.AppStateBD
 import ru.iliavolkov.weather.viewmodel.HistoryViewModel
 

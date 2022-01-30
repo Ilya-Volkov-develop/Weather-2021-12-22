@@ -6,7 +6,7 @@
         android:title="@string/history"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/menu_content"
+        android:id="@+id/menu_contacts"
         android:title="@string/contacts"
         app:showAsAction="ifRoom" />
 </menu>

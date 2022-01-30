@@ -2,7 +2,6 @@ package ru.iliavolkov.weather.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.iliavolkov.weather.model.Weather
 import ru.iliavolkov.weather.repository.RepositoriesRoomImpl
 
 
