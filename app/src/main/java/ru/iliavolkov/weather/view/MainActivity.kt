@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.ActivityMainBinding
+import ru.iliavolkov.weather.view.contacts.ContactsFragment
 import ru.iliavolkov.weather.view.history.HistoryFragment
 import ru.iliavolkov.weather.view.main.MainFragment
 
@@ -23,8 +24,6 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null){
             supportFragmentManager.beginTransaction().replace(R.id.container, MainFragment.newInstance()).commit()
         }
-
-        //registerReceiver(receiver, IntentFilter(CONNECTIVITY_ACTION))
     }
 
 
@@ -38,6 +37,11 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_history -> {
                 supportFragmentManager.beginTransaction()
                         .add(R.id.container, HistoryFragment.newInstance()).addToBackStack("").commit()
+                true
+            }
+            R.id.menu_content -> {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.container, ContactsFragment.newInstance()).addToBackStack("").commit()
                 true
             }
             else -> {
