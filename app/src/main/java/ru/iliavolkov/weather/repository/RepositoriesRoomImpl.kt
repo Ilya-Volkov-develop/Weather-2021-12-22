@@ -21,10 +21,12 @@ class RepositoriesRoomImpl:RepositoryHistoryWeather {
         }
     }
 
-    override fun saveWeather(weather: Weather) {
-        App.getHistoryWeatherDao().insert(
-            convertWeatherToHistoryWeatherEntity(weather)
-        )
+    override fun saveWeather(position:Int,weather: Weather) {
+        Thread {
+            App.getHistoryWeatherDao().insert(
+                convertWeatherToHistoryWeatherEntity(position, weather)
+            )
+        }.start()
     }
 
     override fun delete(weather: Weather) {
@@ -41,8 +43,4 @@ class RepositoriesRoomImpl:RepositoryHistoryWeather {
             weather.feelsLike
         )
     }
-
-
-
-
 }

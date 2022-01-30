@@ -1,6 +1,7 @@
 package ru.iliavolkov.weather.view.main
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,7 @@ import ru.iliavolkov.weather.viewmodel.MainViewModel
 
 class MainFragment : Fragment(),OnItemClickListener {
 
-    private var isRussian = false
+
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
@@ -39,21 +40,38 @@ class MainFragment : Fragment(),OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         initView()
         viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-        viewModel.getWeatherFromLocalSourceRus()
+
     }
 
     private fun initView() {
+        var isRussian = requireActivity().getPreferences(Activity.MODE_PRIVATE).getBoolean("isRussian",true)
+        initLocation(isRussian)
         with(binding){
             mainFragmentRecyclerView.adapter = adapter
             mainFragmentFAB.setOnClickListener {
-                restart()
-                if (!isRussian) mainFragmentFAB.setImageResource(R.drawable.ic_earth)
-                else mainFragmentFAB.setImageResource(R.drawable.ic_russia)
                 isRussian = !isRussian
+                initLocation(isRussian)
             }
         }
-
     }
+
+    private fun initLocation(isRussian: Boolean) {
+        with(viewModel){
+            if (isRussian) getWeatherFromLocalSourceRus()
+            else getWeatherFromLocalSourceWorld()
+        }
+        if (isRussian) {
+            viewModel.getWeatherFromLocalSourceRus()
+            binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
+            requireActivity().getPreferences(Activity.MODE_PRIVATE).edit().putBoolean("isRussian", true).apply()
+        } else {
+            viewModel.getWeatherFromLocalSourceWorld()
+            binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
+            requireActivity().getPreferences(Activity.MODE_PRIVATE).edit().putBoolean("isRussian", false).apply()
+        }
+    }
+
+
 
     @SuppressLint("SetTextI18n")
     private fun renderData(appStateCity: AppStateCity) {
@@ -61,7 +79,7 @@ class MainFragment : Fragment(),OnItemClickListener {
             when(appStateCity){
                 is AppStateCity.Error -> {
                     Toast.makeText(requireContext(),appStateCity.error, Toast.LENGTH_SHORT).show()
-                    restart()
+                    initView()
                 }
                 is AppStateCity.Loading -> {
                     mainFragmentLoadingLayout.visibility = View.VISIBLE
@@ -80,6 +98,8 @@ class MainFragment : Fragment(),OnItemClickListener {
 //        Snackbar.make(this,text,length).show()
 //    }
 
+
+
     override fun onItemClick(city: City) {
         activity?.run{
             supportFragmentManager.beginTransaction()
@@ -92,13 +112,7 @@ class MainFragment : Fragment(),OnItemClickListener {
         }
     }
 
-    fun restart(){
-        with(viewModel){
-            if (isRussian) getWeatherFromLocalSourceRus()
-            else getWeatherFromLocalSourceWorld()
-        }
 
-    }
 
     companion object {
         @JvmStatic
