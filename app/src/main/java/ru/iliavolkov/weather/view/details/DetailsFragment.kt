@@ -68,9 +68,8 @@ class DetailsFragment  :Fragment() {
                 is AppStateWeather.Success -> {
                     loadingLayout.visibility = View.GONE
                     val weather = appStateWeather.weatherData
-                    val urlIcon = appStateWeather.icon
                     val condition = convertConditionEngToRus(appStateWeather.condition)
-                    setWeatherData(weather,urlIcon,condition)
+                    setWeatherData(weather,condition)
                 }
             }
         }
@@ -104,8 +103,8 @@ class DetailsFragment  :Fragment() {
 
     //Устанавливаем данные в фрагмент
     @SuppressLint("SetTextI18n")
-    private fun setWeatherData(weather: Weather, urlIcon: String, conditionText: String) {
-        viewModel.saveWeather(position!!,Weather(City(localWeather.city.nameCity,0.0,0.0),weather.temperature,weather.feelsLike))
+    private fun setWeatherData(weather: Weather, conditionText: String) {
+        viewModel.saveWeather(position!!,Weather(City(localWeather.city.nameCity,0.0,0.0),weather.temperature,weather.feelsLike,weather.icon))
         with(binding){
             temperatureLabel.visibility = View.VISIBLE
             feelsLikeLabel.visibility = View.VISIBLE
@@ -114,7 +113,7 @@ class DetailsFragment  :Fragment() {
             temperatureValue.text = "${weather.temperature}"
             feelsLikeValue.text = "${weather.feelsLike}"
             condition.text = conditionText
-            iconWeather.loadIconSvg("https://yastatic.net/weather/i/icons/funky/dark/$urlIcon.svg")
+            iconWeather.loadIconSvg("https://yastatic.net/weather/i/icons/funky/dark/${weather.icon}.svg")
         }
     }
 

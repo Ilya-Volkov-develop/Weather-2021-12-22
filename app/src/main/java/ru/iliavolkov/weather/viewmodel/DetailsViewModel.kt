@@ -35,7 +35,7 @@ class DetailsViewModel(
     }
 
     fun convertDTOtoModel(weatherDTO: WeatherDTO):Weather{
-        return Weather(getDefaultCity(),weatherDTO.fact.temp.toInt(),weatherDTO.fact.feelsLike.toInt())
+        return Weather(getDefaultCity(),weatherDTO.fact.temp.toInt(),weatherDTO.fact.feelsLike.toInt(),weatherDTO.fact.icon)
     }
 
     private val callback = object :Callback<WeatherDTO>{
@@ -46,7 +46,7 @@ class DetailsViewModel(
         override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
             if (response.isSuccessful){
                 response.body()?.let {
-                    liveData.postValue(AppStateWeather.Success(convertDTOtoModel(it),it.fact.icon,it.fact.condition))
+                    liveData.postValue(AppStateWeather.Success(convertDTOtoModel(it),it.fact.condition))
                 }
             } else{
                 liveData.postValue(AppStateWeather.Error(R.string.codeError,response.code()))

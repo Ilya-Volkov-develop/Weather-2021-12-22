@@ -16,7 +16,8 @@ class RepositoriesRoomImpl:RepositoryHistoryWeather {
             Weather(
                 City(it.city,0.0,0.0),
                 it.temperature,
-                it.feelsLike
+                it.feelsLike,
+                it.icon
             )
         }
     }
@@ -34,7 +35,8 @@ class RepositoriesRoomImpl:RepositoryHistoryWeather {
             position.toLong()+1,
             weather.city.nameCity,
             weather.temperature,
-            weather.feelsLike
+            weather.feelsLike,
+            weather.icon
         )
     }
 }

@@ -37,6 +37,13 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="5" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iconWeather"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toEndOf="@+id/feelsLike"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_item_line_height"
