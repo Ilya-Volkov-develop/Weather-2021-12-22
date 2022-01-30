@@ -27,6 +27,12 @@ class RepositoriesRoomImpl:RepositoryHistoryWeather {
         )
     }
 
+    override fun delete(weather: Weather) {
+        App.getHistoryWeatherDao().delete(
+                convertWeatherToHistoryWeatherEntity(weather)
+        )
+    }
+
     private fun convertWeatherToHistoryWeatherEntity(weather: Weather): HistoryWeatherEntity {
         return HistoryWeatherEntity(
             0,

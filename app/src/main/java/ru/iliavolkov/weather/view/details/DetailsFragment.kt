@@ -105,7 +105,7 @@ class DetailsFragment  :Fragment() {
 
         with(binding){
             iconWeather.setOnClickListener {
-                viewModel.saveWeather(weather)
+                viewModel.saveWeather(Weather(City(localWeather.city.nameCity,0.0,0.0),weather.temperature,weather.feelsLike))
             }
             temperatureLabel.visibility = View.VISIBLE
             feelsLikeLabel.visibility = View.VISIBLE
