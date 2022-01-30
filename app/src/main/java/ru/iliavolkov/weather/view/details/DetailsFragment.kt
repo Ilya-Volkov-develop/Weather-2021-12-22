@@ -20,12 +20,14 @@ import ru.iliavolkov.weather.databinding.FragmentDetailsBinding
 import ru.iliavolkov.weather.model.City
 import ru.iliavolkov.weather.model.Weather
 import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
+import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT_POSITION
 import ru.iliavolkov.weather.viewmodel.AppStateWeather
 import ru.iliavolkov.weather.viewmodel.DetailsViewModel
 
 class DetailsFragment  :Fragment() {
 
     lateinit var localWeather: Weather
+    private var position: Int? = null
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
 
@@ -49,6 +51,7 @@ class DetailsFragment  :Fragment() {
                 localWeather = Weather(city,city.lat.toInt(),city.lon.toInt())
                 viewModel.getWeatherFromRemoteServer(city.lat,city.lon)
             }
+            position = it.getInt(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT_POSITION)
         }
     }
 
@@ -102,11 +105,8 @@ class DetailsFragment  :Fragment() {
     //Устанавливаем данные в фрагмент
     @SuppressLint("SetTextI18n")
     private fun setWeatherData(weather: Weather, urlIcon: String, conditionText: String) {
-
+        viewModel.saveWeather(position!!,Weather(City(localWeather.city.nameCity,0.0,0.0),weather.temperature,weather.feelsLike))
         with(binding){
-            iconWeather.setOnClickListener {
-                viewModel.saveWeather(Weather(City(localWeather.city.nameCity,0.0,0.0),weather.temperature,weather.feelsLike))
-            }
             temperatureLabel.visibility = View.VISIBLE
             feelsLikeLabel.visibility = View.VISIBLE
             cityName.text = localWeather.city.nameCity

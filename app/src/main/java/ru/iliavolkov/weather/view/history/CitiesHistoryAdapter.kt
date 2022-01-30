@@ -8,7 +8,7 @@ import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentHistoryRecyclerCityItemBinding
 import ru.iliavolkov.weather.model.Weather
 
-class CitiesHistoryAdapter(val listener: OnItemClickListener): RecyclerView.Adapter<CitiesHistoryAdapter.CitiesHistoryHolder>() {
+class CitiesHistoryAdapter(): RecyclerView.Adapter<CitiesHistoryAdapter.CitiesHistoryHolder>() {
 
     private var weatherData:List<Weather> = listOf()
 
@@ -22,7 +22,7 @@ class CitiesHistoryAdapter(val listener: OnItemClickListener): RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: CitiesHistoryHolder, position: Int) {
-        holder.bind(this.weatherData[position])
+        holder.bind(this.weatherData[position],position)
     }
 
     override fun getItemCount(): Int {
@@ -30,12 +30,11 @@ class CitiesHistoryAdapter(val listener: OnItemClickListener): RecyclerView.Adap
     }
 
     inner class CitiesHistoryHolder(view: View): RecyclerView.ViewHolder(view){
-        fun bind(weather: Weather){
+        fun bind(weather: Weather,position:Int){
             FragmentHistoryRecyclerCityItemBinding.bind(itemView).run {
                 cityName.text = weather.city.nameCity
                 temperature.text = weather.temperature.toString()
                 feelsLike.text = weather.feelsLike.toString()
-                root.setOnClickListener{ listener.onItemClick(weather) }
             }
         }
     }

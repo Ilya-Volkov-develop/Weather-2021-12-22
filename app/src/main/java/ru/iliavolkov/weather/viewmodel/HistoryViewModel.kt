@@ -1,7 +1,5 @@
 package ru.iliavolkov.weather.viewmodel
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.iliavolkov.weather.model.Weather
@@ -21,11 +19,5 @@ class HistoryViewModel(private val liveData: MutableLiveData<AppStateBD> = Mutab
             val listWeather = repositoriesRoomImpl.getAllHistoryWeather()
             liveData.postValue(AppStateBD.Success(listWeather))
         }.start()
-    }
-
-    fun delete(weather:Weather){
-        repositoriesRoomImpl.delete(weather)
-        val listWeather = repositoriesRoomImpl.getAllHistoryWeather()
-        liveData.postValue(AppStateBD.Success(listWeather))
     }
 }

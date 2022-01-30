@@ -22,7 +22,7 @@ class MainFragmentAdapter(val listener: OnItemClickListener): RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.bind(this.cityData[position])
+        holder.bind(this.cityData[position],position)
     }
 
     override fun getItemCount(): Int {
@@ -30,10 +30,10 @@ class MainFragmentAdapter(val listener: OnItemClickListener): RecyclerView.Adapt
     }
 
     inner class MainViewHolder(view:View):RecyclerView.ViewHolder(view){
-        fun bind(city: City){
+        fun bind(city: City,position:Int){
             FragmentMainRecyclerCityItemBinding.bind(itemView).run {
                 mainFragmentRecyclerItemTextView.text = city.nameCity
-                root.setOnClickListener{ listener.onItemClick(city) }
+                root.setOnClickListener{ listener.onItemClick(city,position) }
             }
 
 

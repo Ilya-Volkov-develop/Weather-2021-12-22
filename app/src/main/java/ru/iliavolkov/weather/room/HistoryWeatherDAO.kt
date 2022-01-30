@@ -5,7 +5,7 @@ import androidx.room.*
 @Dao
 interface HistoryWeatherDAO {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(entity: HistoryWeatherEntity)
 
     @Delete

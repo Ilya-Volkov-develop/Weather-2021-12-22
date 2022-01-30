@@ -25,8 +25,8 @@ class DetailsViewModel(
 
     fun getLiveData() = liveData
 
-    fun saveWeather(weather: Weather){
-        repositoriesRoomImpl.saveWeather(weather)
+    fun saveWeather(position:Int, weather: Weather){
+        repositoriesRoomImpl.saveWeather(position,weather)
     }
 
     fun getWeatherFromRemoteServer(lat:Double,lon:Double){

@@ -13,6 +13,7 @@ import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
 import ru.iliavolkov.weather.model.City
 import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
+import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT_POSITION
 import ru.iliavolkov.weather.view.details.DetailsFragment
 import ru.iliavolkov.weather.viewmodel.AppStateCity
 import ru.iliavolkov.weather.viewmodel.MainViewModel
@@ -87,31 +88,23 @@ class MainFragment : Fragment(),OnItemClickListener {
                 is AppStateCity.Success -> {
                     mainFragmentLoadingLayout.visibility = View.GONE
                     adapter.setWeather(appStateCity.cityData)
-                    //binding.root.showSnackBarWithoutActivity("Успешно",Snackbar.LENGTH_SHORT)
                 }
             }
         }
 
     }
 
-//    private fun View.showSnackBarWithoutActivity(text:String, length:Int){
-//        Snackbar.make(this,text,length).show()
-//    }
-
-
-
-    override fun onItemClick(city: City) {
+    override fun onItemClick(city: City,position:Int) {
         activity?.run{
             supportFragmentManager.beginTransaction()
                     .add(R.id.container,
                             DetailsFragment.newInstance(Bundle().apply {
-                                        putParcelable(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT,city)
-                                    }
-                            ))
+                                putParcelable(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT,city)
+                                putInt(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT_POSITION,position)
+                            }))
                     .addToBackStack("").commit()
         }
     }
-
 
 
     companion object {
