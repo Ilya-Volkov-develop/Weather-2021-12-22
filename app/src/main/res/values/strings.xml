@@ -9,4 +9,18 @@
     <string name="city_coordinates" translatable="false">lt/ln: %s, %s"</string>
     <string name="history">History</string>
     <string name="contacts">Contacts</string>
+
+    <!-- lesson 10-->
+    <string name="dialog_button_close" translatable="false">Закрыть</string>
+    <string name="dialog_title_no_gps" translatable="false">Доступ к геолокации закрыт</string>
+    <string name="dialog_message_no_gps" translatable="false">Разрешите доступ к геолокации, если хотите узнать погоду текущего места</string>
+    <string name="dialog_title_gps_turned_off" translatable="false">GPS отключён</string>
+    <string name="dialog_message_last_location_unknown" translatable="false">Местонахождение неизвестно. Включите GPS, если хотите получить погоду по текущему адресу</string>
+    <string name="dialog_message_last_known_location" translatable="false">Показана последняя известная локация. Включите GPS, если хотите обновить местонахождение</string>
+    <string name="dialog_rationale_title" translatable="false">Доступ к геолокации</string>
+    <string name="dialog_rationale_message" translatable="false">Объяснение</string>
+    <string name="dialog_rationale_give_access" translatable="false">Предоставить доступ</string>
+    <string name="dialog_rationale_decline" translatable="false">Не надо</string>
+    <string name="dialog_address_title" translatable="false">Ваш адрес</string>
+    <string name="dialog_address_get_weather" translatable="false">Узнать погоду</string>
 </resources>

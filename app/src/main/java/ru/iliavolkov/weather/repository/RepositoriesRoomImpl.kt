@@ -14,7 +14,7 @@ class RepositoriesRoomImpl:RepositoryHistoryWeather {
     private fun convertHistoryWeatherEntityToWeather(entityList:List<HistoryWeatherEntity>):List<Weather>{
         return entityList.map{
             Weather(
-                City(it.city,0.0,0.0),
+                City(it.nameCity,0.0,0.0),
                 it.temperature,
                 it.feelsLike,
                 it.icon

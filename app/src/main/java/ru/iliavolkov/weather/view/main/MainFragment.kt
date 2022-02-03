@@ -1,12 +1,22 @@
 package ru.iliavolkov.weather.view.main
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import androidx.appcompat.app.AlertDialog
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.iliavolkov.weather.R
@@ -23,16 +33,10 @@ class MainFragment : Fragment(),OnItemClickListener {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+    private val adapter:MainFragmentAdapter by lazy { MainFragmentAdapter(this) }
+    private val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
 
-    private val adapter:MainFragmentAdapter by lazy {
-        MainFragmentAdapter(this)
-    }
-
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMainBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -53,7 +57,121 @@ class MainFragment : Fragment(),OnItemClickListener {
                 isRussian = !isRussian
                 initLocation(isRussian)
             }
+            mainFragmentFABLocation.setOnClickListener {
+                checkPermission()
+            }
         }
+    }
+
+    private fun checkPermission() {
+        context?.let {
+            when {
+                ContextCompat.checkSelfPermission(
+                        it,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    getLocation()
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                    showDialogRatio()
+                }
+                else -> {
+                    myRequestPermission()
+                }
+            }
+        }
+    }
+
+
+    private val MIN_DISTANCE = 100f
+    private val REFRESH_PERIOD = 60000L
+
+    private fun getAddress(location: Location){
+        Log.d("mylogs"," $location")
+        Log.d("mylogs","1")
+        Thread{
+            val listAddress = Geocoder(requireContext()).getFromLocation(location.latitude,location.longitude,1)
+            Log.d("mylogs"," $listAddress")
+        }.start()
+    }
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            getAddress(location)
+        }
+        override fun onProviderDisabled(provider: String) {
+            super.onProviderDisabled(provider)
+        }
+        override fun onProviderEnabled(provider: String) {
+            super.onProviderEnabled(provider)
+        }
+    }
+
+
+    private fun getLocation(){
+        activity?.let {
+            if(ContextCompat.checkSelfPermission(
+                            it,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    )==PackageManager.PERMISSION_GRANTED){
+                val locationManager = it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+                    providerGPS?.let {
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                                REFRESH_PERIOD,
+                                MIN_DISTANCE,
+                                locationListener
+                        )
+                        Log.d("mylogs","2")
+                    }
+                }else{
+                    val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    lastLocation?.let{
+                        getAddress(it)
+                        Log.d("mylogs","3")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showDialog(){
+
+    }
+
+    val REQUEST_CODE = 999
+    private fun myRequestPermission() {
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_CODE) {
+
+            when {
+                (grantResults[0] == PackageManager.PERMISSION_GRANTED) -> {
+                    getLocation()
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                    showDialogRatio()
+                }
+                else -> {
+                    Log.d("", "КОНЕЦ")
+                }
+            }
+        }
+    }
+
+    private fun showDialogRatio() {
+        AlertDialog.Builder(requireContext())
+                .setTitle("Доступ к геолокации") // TODO HW
+                .setMessage(getString(R.string.dialog_message_no_gps))
+                .setPositiveButton("Предоставить доступ") { _, _ ->
+                    myRequestPermission()
+                }
+                .setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+
     }
 
     private fun initLocation(isRussian: Boolean) {
@@ -93,7 +211,6 @@ class MainFragment : Fragment(),OnItemClickListener {
         }
 
     }
-
     override fun onItemClick(city: City,position:Int) {
         activity?.run{
             supportFragmentManager.beginTransaction()
@@ -106,12 +223,10 @@ class MainFragment : Fragment(),OnItemClickListener {
         }
     }
 
-
     companion object {
         @JvmStatic
         fun newInstance() = MainFragment()
     }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

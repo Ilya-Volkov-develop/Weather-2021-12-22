@@ -6,4 +6,6 @@
     <string name="exit">Выйти</string>
     <string name="error">Ошибка</string>
     <string name="codeError">Код ошибки</string>
+    <string name="history">История</string>
+    <string name="contacts">Контакты</string>
 </resources>
