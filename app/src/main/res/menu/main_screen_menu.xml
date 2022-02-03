@@ -8,5 +8,9 @@
     <item
         android:id="@+id/menu_contacts"
         android:title="@string/contacts"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_map"
+        android:title="@string/google_map"
         app:showAsAction="ifRoom" />
 </menu>

@@ -49,6 +49,8 @@ android {
 
 dependencies {
 
+    //google
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
     //Room
     implementation 'androidx.room:room-runtime:2.2.5'
     kapt 'androidx.room:room-compiler:2.2.5'

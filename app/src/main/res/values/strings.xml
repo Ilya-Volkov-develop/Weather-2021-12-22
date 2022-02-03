@@ -23,4 +23,5 @@
     <string name="dialog_rationale_decline" translatable="false">Не надо</string>
     <string name="dialog_address_title" translatable="false">Ваш адрес</string>
     <string name="dialog_address_get_weather" translatable="false">Узнать погоду</string>
+    <string name="google_map" translatable="false">Google Map</string>
 </resources>

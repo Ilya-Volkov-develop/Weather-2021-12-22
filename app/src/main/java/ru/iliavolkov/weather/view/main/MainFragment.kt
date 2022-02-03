@@ -3,8 +3,6 @@ package ru.iliavolkov.weather.view.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
-import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -17,15 +15,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
 import ru.iliavolkov.weather.model.City
-import ru.iliavolkov.weather.model.Weather
-import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
-import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT_POSITION
+import ru.iliavolkov.weather.utils.*
 import ru.iliavolkov.weather.view.details.DetailsFragment
 import ru.iliavolkov.weather.viewmodel.AppStateCity
 import ru.iliavolkov.weather.viewmodel.MainViewModel
@@ -64,7 +61,7 @@ class MainFragment : Fragment(),OnItemClickListener {
             }
         }
     }
-
+    //region location
     private fun checkPermission() {
         context?.let {
             when {
@@ -85,15 +82,9 @@ class MainFragment : Fragment(),OnItemClickListener {
     }
 
 
-    private val MIN_DISTANCE = 100f
-    private val REFRESH_PERIOD = 60000L
-
     private fun getAddress(location: Location){
-        Log.d("mylogs"," $location")
-        Log.d("mylogs","1")
         Thread{
             val listAddress = Geocoder(requireContext()).getFromLocation(location.latitude,location.longitude,1)
-            Log.d("mylogs"," $listAddress")
             if (listAddress != null)
                 requireActivity().runOnUiThread{
                     showDialogAddress(listAddress[0].getAddressLine(0),location)
@@ -104,7 +95,6 @@ class MainFragment : Fragment(),OnItemClickListener {
         override fun onLocationChanged(location: Location) {
                 getAddress(location)
         }
-
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
         override fun onProviderEnabled(provider: String) {}
         override fun onProviderDisabled(provider: String) {}
@@ -126,13 +116,11 @@ class MainFragment : Fragment(),OnItemClickListener {
                                 MIN_DISTANCE,
                                 locationListener
                         )
-                        Log.d("mylogs","2")
                     }
                 }else{
                     val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                     lastLocation?.let{
                         getAddress(it)
-                        Log.d("mylogs","3")
                     }
                 }
             }
@@ -141,7 +129,7 @@ class MainFragment : Fragment(),OnItemClickListener {
 
     private fun showDialogAddress(address:String,location: Location){
         AlertDialog.Builder(requireContext())
-                .setTitle(getString(R.string.dialog_address_title)) // TODO HW
+                .setTitle(getString(R.string.dialog_address_title))
                 .setMessage(address)
                 .setPositiveButton(getString(R.string.dialog_address_get_weather)) { _, _ ->
                     requireActivity().supportFragmentManager.beginTransaction()
@@ -152,12 +140,12 @@ class MainFragment : Fragment(),OnItemClickListener {
                                         }))
                                 .addToBackStack("").commit()
                     }
-                .setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
+                .setNegativeButton(getString(R.string.dialog_button_close)) { dialog, _ -> dialog.dismiss() }
                 .create()
                 .show()
     }
 
-    val REQUEST_CODE = 999
+
     private fun myRequestPermission() {
         requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
     }
@@ -181,16 +169,17 @@ class MainFragment : Fragment(),OnItemClickListener {
 
     private fun showDialogRatio() {
         AlertDialog.Builder(requireContext())
-                .setTitle("Доступ к геолокации") // TODO HW
+                .setTitle(getString(R.string.dialog_rationale_title))
                 .setMessage(getString(R.string.dialog_message_no_gps))
-                .setPositiveButton("Предоставить доступ") { _, _ ->
+                .setPositiveButton(getString(R.string.dialog_rationale_give_access)) { _, _ ->
                     myRequestPermission()
                 }
-                .setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
+                .setNegativeButton(getString(R.string.dialog_button_close)) { dialog, _ -> dialog.dismiss() }
                 .create()
                 .show()
 
     }
+    //endregion
 
     private fun initLocation(isRussian: Boolean) {
         with(viewModel){

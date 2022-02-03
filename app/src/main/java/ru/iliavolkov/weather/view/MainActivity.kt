@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.ActivityMainBinding
+import ru.iliavolkov.weather.lesson10.MapsFragment
 import ru.iliavolkov.weather.view.contacts.ContactsFragment
 import ru.iliavolkov.weather.view.history.HistoryFragment
 import ru.iliavolkov.weather.view.main.MainFragment
@@ -35,13 +36,27 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return return when (item.itemId) {
             R.id.menu_history -> {
-                supportFragmentManager.beginTransaction()
-                        .add(R.id.container, HistoryFragment.newInstance()).addToBackStack("").commit()
+                val fragmentTag = supportFragmentManager.findFragmentByTag("HistoryFragment")
+                if(fragmentTag==null) {
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.container, HistoryFragment.newInstance(),"HistoryFragment").addToBackStack("").commit()
+                }
                 true
             }
             R.id.menu_contacts -> {
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.container, ContactsFragment.newInstance()).addToBackStack("").commit()
+                val fragmentTag = supportFragmentManager.findFragmentByTag("ContactsFragment")
+                if(fragmentTag==null) {
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.container, ContactsFragment.newInstance(),"ContactsFragment").addToBackStack("").commit()
+                }
+                true
+            }
+            R.id.menu_map -> {
+                val fragmentTag = supportFragmentManager.findFragmentByTag("MapsFragment")
+                if(fragmentTag==null){
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.container, MapsFragment.newInstance(),"MapsFragment").addToBackStack("").commit()
+                }
                 true
             }
             else -> {
