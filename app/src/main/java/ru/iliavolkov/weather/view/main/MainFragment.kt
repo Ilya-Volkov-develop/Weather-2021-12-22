@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import android.content.Context
+import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -22,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import ru.iliavolkov.weather.R
 import ru.iliavolkov.weather.databinding.FragmentMainBinding
 import ru.iliavolkov.weather.model.City
+import ru.iliavolkov.weather.model.Weather
 import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT
 import ru.iliavolkov.weather.utils.BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT_POSITION
 import ru.iliavolkov.weather.view.details.DetailsFragment
@@ -92,18 +94,20 @@ class MainFragment : Fragment(),OnItemClickListener {
         Thread{
             val listAddress = Geocoder(requireContext()).getFromLocation(location.latitude,location.longitude,1)
             Log.d("mylogs"," $listAddress")
+            if (listAddress != null)
+                requireActivity().runOnUiThread{
+                    showDialogAddress(listAddress[0].getAddressLine(0),location)
+                }
         }.start()
     }
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            getAddress(location)
+                getAddress(location)
         }
-        override fun onProviderDisabled(provider: String) {
-            super.onProviderDisabled(provider)
-        }
-        override fun onProviderEnabled(provider: String) {
-            super.onProviderEnabled(provider)
-        }
+
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
     }
 
 
@@ -113,7 +117,7 @@ class MainFragment : Fragment(),OnItemClickListener {
                             it,
                             Manifest.permission.ACCESS_FINE_LOCATION
                     )==PackageManager.PERMISSION_GRANTED){
-                val locationManager = it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                val locationManager = it.getSystemService(LOCATION_SERVICE) as LocationManager
                 if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER)
                     providerGPS?.let {
@@ -135,8 +139,22 @@ class MainFragment : Fragment(),OnItemClickListener {
         }
     }
 
-    private fun showDialog(){
-
+    private fun showDialogAddress(address:String,location: Location){
+        AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.dialog_address_title)) // TODO HW
+                .setMessage(address)
+                .setPositiveButton(getString(R.string.dialog_address_get_weather)) { _, _ ->
+                    requireActivity().supportFragmentManager.beginTransaction()
+                                .add(R.id.container,
+                                        DetailsFragment.newInstance(Bundle().apply {
+                                            putParcelable(BUNDLE_KEY_MAIN_FRAGMENT_IN_DETAILS_FRAGMENT,
+                                                    City(address,location.latitude,location.longitude))
+                                        }))
+                                .addToBackStack("").commit()
+                    }
+                .setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
     }
 
     val REQUEST_CODE = 999
