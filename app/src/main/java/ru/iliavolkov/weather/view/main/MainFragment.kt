@@ -5,10 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
+import android.location.*
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -108,10 +105,10 @@ class MainFragment : Fragment(),OnItemClickListener {
                             Manifest.permission.ACCESS_FINE_LOCATION
                     )==PackageManager.PERMISSION_GRANTED){
                 val locationManager = it.getSystemService(LOCATION_SERVICE) as LocationManager
-                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                    val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                    val providerGPS = locationManager.getProvider(LocationManager.NETWORK_PROVIDER)
                     providerGPS?.let {
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                                 REFRESH_PERIOD,
                                 MIN_DISTANCE,
                                 locationListener
