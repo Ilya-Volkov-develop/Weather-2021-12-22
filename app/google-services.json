@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "166346449691",
+    "project_id": "weather-c3180",
+    "storage_bucket": "weather-c3180.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166346449691:android:e6e0e96110f4c9258f69be",
+        "android_client_info": {
+          "package_name": "ru.iliavolkov.weather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166346449691-ljn2lo0hfr9mfj5qucg2n7e9mvuaqoal.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSsm2AFA8kNkTZ3jj8TCtFvL83lcDBBEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166346449691-ljn2lo0hfr9mfj5qucg2n7e9mvuaqoal.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
